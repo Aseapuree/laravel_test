@@ -36,4 +36,4 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage \
     && chmod -R 775 bootstrap/cache \
-    && chmod -R 755 public/storage
+    && chmod -R 755 public
