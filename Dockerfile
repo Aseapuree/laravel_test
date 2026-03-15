@@ -32,6 +32,9 @@ COPY . .
 # instalar dependencias laravel
 RUN composer install --no-dev --optimize-autoloader
 
+# crear enlace de storage
+RUN php artisan storage:link
+
 # permisos laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage \
