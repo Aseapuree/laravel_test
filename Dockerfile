@@ -38,6 +38,8 @@ RUN php artisan storage:link
 # permisos laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage \
+    && chmod -R 755 storage/app \
+    && chmod -R 755 storage/app/public \
     && chmod -R 775 bootstrap/cache
 
 
