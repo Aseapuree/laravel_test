@@ -50,11 +50,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function getAuthIdentifierName(): string
-    {
-        return 'user';
-    }
-
     public function scopeActive($query){
         return $query->where('deleted', 0);
     }
