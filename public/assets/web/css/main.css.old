@@ -6471,13 +6471,10 @@ input.main-search-input::placeholder {
 .tab-content .product-collection-item .product-image {
   position: relative;
   overflow: hidden;
-  height: 280px;
 }
 .tab-content .product-collection-item .product-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
   transition: all 0.4s ease-in-out;
 }
 .tab-content .product-collection-item .product-image .badge {
@@ -8311,16 +8308,12 @@ input.main-search-input::placeholder {
 }
 .product-details-wrapper .tab-content .product-details-item .shop-image {
   background: #F1F3F4;
-  padding: 0;
+  padding: 45px;
   position: relative;
-  overflow: hidden;
-  height: 280px;
 }
 .product-details-wrapper .tab-content .product-details-item .shop-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
   transition: all 0.4s ease-in-out;
 }
 .product-details-wrapper .tab-content .product-details-item .shop-image .shop-icon {
@@ -8897,16 +8890,9 @@ input.main-search-input::placeholder {
   padding: 0;
   max-width: 109px;
 }
-.shop-details-wrapper .shop-details-image .shop-thumb {
-  overflow: hidden;
-  height: 420px;
-  background: #F1F3F4;
-}
 .shop-details-wrapper .shop-details-image .shop-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
 }
 .shop-details-wrapper .product-details-content {
   margin-left: 60px;
