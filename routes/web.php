@@ -38,8 +38,6 @@ Route::get('register', [AuthController::class, 'register'])->name('auth.register
 Route::post('register', [AuthController::class, 'store'])->name('auth.store');
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::get('sales/{sale}/pdf', [SaleController::class, 'pdf'])->name('sales.pdf');
-
 Route::middleware(['auth:web'])->group(function(){
 	Route::get('checkout', [WebController::class, 'checkout'])->name('checkout');
 	Route::post('checkout', [WebController::class, 'finalize'])->name('finalize');
@@ -47,6 +45,7 @@ Route::middleware(['auth:web'])->group(function(){
 	Route::get('profile', [WebController::class, 'profile'])->name('profile');
 	Route::post('profile', [WebController::class, 'update'])->name('update');
 	Route::get('orders', [WebController::class, 'orders'])->name('orders');
+	Route::get('sales/{sale}/pdf', [SaleController::class, 'pdf'])->name('sales.pdf');
 });
 
 Route::prefix('admin')->group(function(){
@@ -70,4 +69,3 @@ Route::prefix('admin')->group(function(){
 	});
 
 });
-

@@ -39,12 +39,16 @@ class SaleController extends Controller
     }
 
     public function pdf(Request $request, Sale $sale, Fpdf $fpdf){
+
+        if(auth()->guard('web')->check() && $sale->client_id !== auth()->guard('web')->id()){
+            abort(403);
+        }
+
         $fpdf->AddPage();
         $fpdf->SetFont('Arial', 'B', 12);
-#        $fpdf->Image(asset('assets/web/img/logo.png'), 10, 10, 30);
 
         $fpdf->Cell(40, 10);
-        $fpdf->Cell(90, 10, 'COMPTECH', 0, 0, 'C');
+        $fpdf->Cell(90, 10, 'BOUTIQUE', 0, 0, 'C');
 
         if($sale->voucher == 'Boleta'){
             $fpdf->MultiCell(60, 6, utf8_decode('BOLETA DE VENTA ELECTRÓNICA '.$sale->number), 1, 'C');

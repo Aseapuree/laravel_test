@@ -7,9 +7,26 @@
     <div class="product-details-wrapper">
         <div class="row g-4">
             <div class="col-lg-3">
-                <form action="">
+                <form action="{{ route('shop') }}" method="GET">
+                    @if(request('search'))
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                    @endif
                     <div class="main-sideber">
                         <div class="single-sidebar-widget-2">
+                            <div class="wid-title">
+                                <h5>Buscar</h5>
+                            </div>
+                            <div class="search-widget">
+                                <div style="position: relative;">
+                                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Nombre del producto..." class="form-control" style="padding-right: 40px;">
+                                    @if(request('search'))
+                                    <a href="{{ route('shop', request()->except('search', 'page')) }}" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #999; font-size: 14px;">
+                                        <i class="fa-regular fa-times"></i>
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                             <div class="wid-title">
                                 <h5>Precio</h5>
                             </div>
@@ -82,6 +99,16 @@
                 </form>
             </div>
             <div class="col-lg-9">
+                @if(request('search'))
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <p style="margin:0; color: var(--text);">
+                        {{ $products->total() }} resultado(s) para <strong>"{{ request('search') }}"</strong>
+                    </p>
+                    <a href="{{ route('shop') }}" style="font-size: 14px; color: var(--theme);">
+                        <i class="fa-regular fa-times"></i> Limpiar búsqueda
+                    </a>
+                </div>
+                @endif
                 <div class="tab-content">
                     <div class="row g-4">
                         @if($products->count() > 0)
