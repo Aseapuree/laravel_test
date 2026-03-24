@@ -8,9 +8,6 @@
         <div class="row g-4">
             <div class="col-lg-3">
                 <form action="{{ route('shop') }}" method="GET">
-                    @if(request('search'))
-                        <input type="hidden" name="search" value="{{ request('search') }}">
-                    @endif
                     <div class="main-sideber">
                         <div class="single-sidebar-widget-2">
                             <div class="wid-title">
@@ -20,13 +17,14 @@
                                 <div style="position: relative;">
                                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Nombre del producto..." class="form-control" style="padding-right: 40px;">
                                     @if(request('search'))
-                                    <a href="{{ route('shop', request()->except('search', 'page')) }}" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #999; font-size: 14px;">
+                                    <a href="{{ route('shop') }}" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #999; font-size: 14px;">
                                         <i class="fa-regular fa-times"></i>
                                     </a>
                                     @endif
                                 </div>
                             </div>
                         </div>
+                        <div class="single-sidebar-widget-2">
                             <div class="wid-title">
                                 <h5>Precio</h5>
                             </div>
@@ -124,7 +122,6 @@
                                                 <input type="hidden" name="id" value="{{ $product->id }}">
                                                 <a href="#" onclick="this.closest('form').submit()"><i class="fa-regular fa-cart-shopping"></i></a>
                                             </form>
-                                            
                                         </li>
                                     </ul>
                                 </div>
