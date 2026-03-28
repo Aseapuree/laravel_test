@@ -71,11 +71,11 @@
             <ul class="contact-list">
                 <li>
                     <i class="fa-solid fa-phone"></i>
-                    <a href="tel:+51999999999">+51999999999</a>
+                    <a href="tel:+51947338369">+51 947338369</a>
                 </li>
                 <li>
                     <i class="fa-solid fa-envelope"></i>
-                    <a href="mailto:contacto@gmail.com">contacto@gmail.com</a>
+                    <a href="mailto:ecomas.boutique@gmail.com">ecomas.boutique@gmail.com</a>
                 </li>
             </ul>
             <p>
@@ -256,12 +256,12 @@
                         <div class="footer-content">
                             <div class="text">
                                 <p>¿Dudas o Consultas?</p>
-                                <a href="tel:+51999999999">+51999999999</a>
+                                <a href="tel:+51947338369">+51 947338369</a>
                             </div>
                             <ul class="contact-list">
                                 <li>
                                     <i class="fa-regular fa-envelope"></i>
-                                    <a href="mailto:contacto@saloboutique.com">contacto@saloboutique.com</a>
+                                    <a href="mailto:ecomas.boutique@gmail.com">ecomas.boutique@gmail.com</a>
                                 </li>
                                 <li>
                                     <i class="fa-regular fa-location-dot"></i>
