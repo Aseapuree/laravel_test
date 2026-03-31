@@ -114,7 +114,7 @@
                         <div class="col-xl-4 col-lg-6 col-md-6">
                             <div class="product-details-item mt-0">
                                 <div class="shop-image">
-                                    <img src="{{ $product->image_url }}">
+                                    <img src="{{ asset('storage/'.$product->image) }}">
                                     <ul class="shop-icon d-grid justify-content-center align-items-center">
                                         <li>
                                             <form method="POST" action="{{ route('cart.add') }}">

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
@@ -14,8 +13,6 @@ use App\Models\SaleDetail;
 use App\Models\PaymentMethod;
 use App\Models\Delivery;
 use App\Models\Book;
-use App\Mail\OrderConfirmation;
-use App\Mail\NewOrder;
 
 class WebController extends Controller
 {
@@ -142,14 +139,6 @@ class WebController extends Controller
         ]);
 
         session()->forget('cart');
-
-        try {
-            Mail::to($sale->client->email)->send(new OrderConfirmation($sale));
-        } catch (\Exception $e) {}
-
-        try {
-            Mail::to(config('mail.admin_email'))->send(new NewOrder($sale));
-        } catch (\Exception $e) {}
 
         return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale)); 
     }

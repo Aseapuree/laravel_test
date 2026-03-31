@@ -20,14 +20,6 @@ class Product extends Model
 
     public $timestamps = false;
 
-    public function getImageUrlAttribute(): string
-    {
-        if (str_starts_with($this->image, 'http')) {
-            return $this->image;
-        }
-        return asset('storage/' . $this->image);
-    }
-
     public function scopeActive($query){
         return $query->where('deleted', 0);
     }
