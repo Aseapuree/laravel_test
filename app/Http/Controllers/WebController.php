@@ -145,11 +145,15 @@ class WebController extends Controller
 
         try {
             Mail::to($sale->client->email)->send(new OrderConfirmation($sale));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            \Log::error('Error enviando email al cliente: ' . $e->getMessage());
+        }
 
         try {
             Mail::to(config('mail.admin_email'))->send(new NewOrder($sale));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            \Log::error('Error enviando email al admin: ' . $e->getMessage());
+        }
 
         return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale)); 
     }
