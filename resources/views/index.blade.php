@@ -310,7 +310,7 @@
 
                                     <input type="hidden" name="id" value="{{ $product->id }}">
 
-                                    <a href="{{ route('shop') }}" class="theme-btn-2 style-2" onclick="this.closest('form').submit()">Añadir al carrito</a>
+                                    <a href="#" class="theme-btn-2 style-2" onclick="this.closest('form').submit()">Añadir al carrito</a>
 
                                 </form>
 

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
-use App\Services\ImageKitService;
 
 class ProductController extends Controller
 {
@@ -27,35 +26,29 @@ class ProductController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'name'        => 'required',
+            'name' => 'required',
             'category_id' => 'required',
-            'brand_id'    => 'required',
-            'price'       => 'required|numeric',
-            'stock'       => 'required|integer',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'brand_id' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp'
         ]);
 
-        $image = 'https://ik.imagekit.io/v7ab1gamc/products/default.png';
+        $image = 'products/default.png';
 
-        if ($request->hasFile('image')) {
-            try {
-                $imageKit = new ImageKitService();
-                $image    = $imageKit->upload($request->file('image'));
-            } catch (\Exception $e) {
-                \Log::error('Error subiendo imagen a ImageKit: ' . $e->getMessage());
-                return back()->withErrors(['image' => 'Error al subir la imagen. Intenta de nuevo.'])->withInput();
-            }
+        if($request->hasFile('image')){
+            $image = $request->file('image')->store('products', 'public');
         }
 
         Product::create([
-            'name'        => $request->name,
-            'code'        => $request->code,
+            'name' => $request->name,
+            'code' => $request->code,
             'description' => $request->description,
             'category_id' => $request->category_id,
-            'brand_id'    => $request->brand_id,
-            'price'       => $request->price,
-            'stock'       => $request->stock,
-            'image'       => $image,
+            'brand_id' => $request->brand_id,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image' => $image
         ]);
 
         return redirect()->route('products.index')->with('message', 'Registro creado');
@@ -68,37 +61,30 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product){
-
         $request->validate([
-            'name'        => 'required',
+            'name' => 'required',
             'category_id' => 'required',
-            'brand_id'    => 'required',
-            'price'       => 'required|numeric',
-            'stock'       => 'required|integer',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'brand_id' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp'
         ]);
 
         $image = $product->image;
 
-        if ($request->hasFile('image')) {
-            try {
-                $imageKit = new ImageKitService();
-                $image    = $imageKit->upload($request->file('image'));
-            } catch (\Exception $e) {
-                \Log::error('Error subiendo imagen a ImageKit: ' . $e->getMessage());
-                return back()->withErrors(['image' => 'Error al subir la imagen. Intenta de nuevo.'])->withInput();
-            }
+        if($request->hasFile('image')){
+            $image = $request->file('image')->store('products', 'public');
         }
 
         $product->update([
-            'name'        => $request->name,
-            'code'        => $request->code,
+            'name' => $request->name,
+            'code' => $request->code,
             'description' => $request->description,
             'category_id' => $request->category_id,
-            'brand_id'    => $request->brand_id,
-            'price'       => $request->price,
-            'stock'       => $request->stock,
-            'image'       => $image,
+            'brand_id' => $request->brand_id,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image' => $image
         ]);
 
         return redirect()->route('products.index')->with('message', 'Registro actualizado');
