@@ -143,17 +143,21 @@ class WebController extends Controller
 
         session()->forget('cart');
 
-        try {
-            Mail::to($sale->client->email)->queue(new OrderConfirmation($sale));
-        } catch (\Exception $e) {
-            \Log::error('Error encolando email al cliente: ' . $e->getMessage());
-        }
+        $saleForEmail = $sale;
 
-        try {
-            Mail::to(config('mail.admin_email'))->queue(new NewOrder($sale));
-        } catch (\Exception $e) {
-            \Log::error('Error encolando email al admin: ' . $e->getMessage());
-        }
+        app()->terminating(function () use ($saleForEmail) {
+            try {
+                Mail::to($saleForEmail->client->email)->send(new OrderConfirmation($saleForEmail));
+            } catch (\Exception $e) {
+                \Log::error('Error enviando email al cliente: ' . $e->getMessage());
+            }
+
+            try {
+                Mail::to(config('mail.admin_email'))->send(new NewOrder($saleForEmail));
+            } catch (\Exception $e) {
+                \Log::error('Error enviando email al admin: ' . $e->getMessage());
+            }
+        });
 
         return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale)); 
     }

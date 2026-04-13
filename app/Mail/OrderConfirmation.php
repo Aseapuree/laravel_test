@@ -120,15 +120,15 @@ class OrderConfirmation extends Mailable
         $fpdf->Ln();
         $fpdf->SetFont('Arial', 'B', 10);
 
-        $total    = $sale->total - $sale->delivery->price;
-        $igv      = $total * 0.18;
-        $subtotal = $total - $igv;
+        $subtotal_productos = $sale->total - $sale->delivery->price;
+        $igv      = round($subtotal_productos / 1.18 * 0.18, 2);
+        $subtotal = round($subtotal_productos / 1.18, 2);
 
-        $fpdf->Cell(160, 5, 'SUBTOTAL', 0, 0, 'R');
+        $fpdf->Cell(160, 5, 'SUBTOTAL (sin IGV)', 0, 0, 'R');
         $fpdf->Cell(30, 5, number_format($subtotal, 2), 0, 0, 'R');
         $fpdf->Ln();
 
-        $fpdf->Cell(160, 5, 'IGV', 0, 0, 'R');
+        $fpdf->Cell(160, 5, 'IGV (18%)', 0, 0, 'R');
         $fpdf->Cell(30, 5, number_format($igv, 2), 0, 0, 'R');
         $fpdf->Ln();
 
