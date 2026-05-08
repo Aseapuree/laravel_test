@@ -48,6 +48,16 @@ Route::middleware(['auth:web'])->group(function(){
 	Route::get('sales/{sale}/pdf', [SaleController::class, 'pdf'])->name('sales.pdf');
 });
 
+
+// ─── Páginas legales y de soporte ───────────────────────────────
+Route::get('terminos-condiciones',  [WebController::class, 'terminos'])->name('terminos');
+Route::get('politicas-privacidad',  [WebController::class, 'privacidad'])->name('privacidad');
+Route::get('cambios-devoluciones',  [WebController::class, 'devoluciones'])->name('devoluciones');
+Route::get('politicas-envio',       [WebController::class, 'envio'])->name('envio');
+Route::get('politicas-cookies',     [WebController::class, 'cookies'])->name('cookies');
+Route::get('contactame',            [WebController::class, 'contactame'])->name('contactame');
+Route::post('contactame',           [WebController::class, 'contactame_store'])->name('contactame.store');
+
 Route::prefix('admin')->group(function(){
 
 	Route::get('login', [AuthAdminController::class, 'login'])->name('auth.admin.login');

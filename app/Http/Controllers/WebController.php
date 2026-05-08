@@ -159,7 +159,7 @@ class WebController extends Controller
             }
         });
 
-        return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale)); 
+        return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale));
     }
 
     public function success(){
@@ -182,7 +182,7 @@ class WebController extends Controller
 
     public function update(Request $request){
         $user = auth()->user();
-        
+
         $request->validate([
             'address' => 'required',
             'phone' => 'required',
@@ -234,5 +234,60 @@ class WebController extends Controller
         ]);
 
         return redirect()->route('book');
+    }
+
+    public function terminos(){
+        return view('terminos');
+    }
+
+    public function privacidad(){
+        return view('privacidad');
+    }
+
+    public function devoluciones(){
+        return view('devoluciones');
+    }
+
+    public function envio(){
+        return view('envio');
+    }
+
+    public function cookies(){
+        return view('cookies');
+    }
+
+    public function contactame(){
+        return view('contactame');
+    }
+
+    public function contactame_store(\Illuminate\Http\Request $request){
+        $request->validate([
+            'nombre'  => 'required|string|max:100',
+            'email'   => 'required|email|max:150',
+            'asunto'  => 'required|string|max:100',
+            'mensaje' => 'required|string|max:2000',
+        ]);
+
+        // Enviar correo al administrador (usando el sistema de mail ya configurado)
+        try {
+            \Illuminate\Support\Facades\Mail::raw(
+                "Nuevo mensaje de contacto\n\n".
+                "Nombre: {$request->nombre}\n".
+                "Email: {$request->email}\n".
+                "Teléfono: ".($request->telefono ?? 'No indicado')."\n".
+                "Asunto: {$request->asunto}\n".
+                "N° Pedido: ".($request->numero_pedido ?? 'No indicado')."\n\n".
+                "Mensaje:\n{$request->mensaje}",
+                function($message) use ($request){
+                    $message->to(config('mail.admin_email', 'ecomas.boutique@gmail.com'))
+                            ->subject('Nuevo contacto: '.$request->asunto)
+                            ->replyTo($request->email, $request->nombre);
+                }
+            );
+        } catch (\Exception $e) {
+            \Log::error('Error enviando contacto: '.$e->getMessage());
+        }
+
+        return redirect()->route('contactame')->with('success', true);
     }
 }

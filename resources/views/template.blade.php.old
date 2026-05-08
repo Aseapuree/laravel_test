@@ -36,7 +36,7 @@
     <i class="fa-regular fa-arrow-up"></i>
 </button>
 
-<!--<< Mouse Cursor Start >>-->
+<!--<< Mouse Cursor Start >>-->  
 <div class="mouse-cursor cursor-outer"></div>
 <div class="mouse-cursor cursor-inner"></div>
 
@@ -108,8 +108,8 @@
                                 <li>
                                     <a href="{{ route('shop') }}">Tienda</a>
                                 </li>
-
-
+                                
+                                
                                 @if(auth()->guard('web')->check())
                                 <li>
                                     <a href="#">
@@ -198,8 +198,6 @@
                         </div>
                         <ul class="list-items style-color">
                             @if(auth()->guard('web')->check())
-                            <li> <a href="{{ route('index')}}">Inicio</a></li>
-                            <li> <a href="{{ route('shop')}}">Tienda</a></li>
                             <li>
                                 <a href="{{ route('profile') }}">
                                     Perfil
@@ -221,28 +219,32 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-lg-4 col-md-4 ps-lg-5 wow fadeInUp" data-wow-delay=".6s">
+                <div class="col-xl-3 col-lg-4 col-md-4 ps-lg-5 wow fadeInUp" data-wow-delay=".6s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Información Legal</h3>
+                            <h3>Enlaces</h3>
                         </div>
                         <ul class="list-items style-color">
-                            <li><a href="{{ route('terminos') }}">Términos y Condiciones</a></li>
-                            <li><a href="{{ route('privacidad') }}">Política de Privacidad</a></li>
-                            <li><a href="{{ route('cookies') }}">Política de Cookies</a></li>
-                            <li><a href="{{ route('envio')}}">Politica de Envió</a><li>
-                            <li><a href="{{ route('book') }}">Libro de Reclamaciones</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xl-2 col-lg-4 col-md-4 ps-lg-3 wow fadeInUp" data-wow-delay=".7s">
-                    <div class="single-footer-widget">
-                        <div class="widget-head">
-                            <h3>Soporte</h3>
-                        </div>
-                        <ul class="list-items style-color">
-                            <li><a href="{{ route('contactame') }}">Contáctame</a></li>
-                            <li><a href="{{ route('devoluciones') }}">Cambios y Devoluciones</a></li>
+                            <li>
+                                <a href="{{ route('index') }}">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('shop') }}">
+                                    Tienda
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('cart') }}">
+                                    Carrito
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('book') }}">
+                                    Libro de reclamaciones
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
