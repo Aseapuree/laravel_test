@@ -31,7 +31,7 @@
                     [
                         'icon'   => 'fa-whatsapp fab',
                         'titulo' => 'WhatsApp',
-                        'lineas' => ['+51 947 338 369', 'Lun – Sáb: 9:00 AM – 6:00 PM', 'Respuesta rápida por WhatsApp'],
+                        'lineas' => ['', 'Lun – Sáb: 9:00 AM – 6:00 PM', 'Respuesta rápida por WhatsApp'],
                     ],
                     [
                         'icon'   => 'fa-envelope',
@@ -76,7 +76,7 @@
                 <div class="p-4" style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,.07);">
                     <h6 class="fw-bold mb-3">Síguenos en redes</h6>
                     <div class="d-flex gap-2 flex-wrap">
-                        @foreach([['fab fa-facebook-f','#'], ['fab fa-instagram','#'], ['fab fa-whatsapp','https://wa.me/51947338369'], ['fab fa-tiktok','#']] as $red)
+                        @foreach([['fab fa-facebook-f','https://www.facebook.com/share/1CowSi4Sxq/'], ['fab fa-instagram','https://www.instagram.com/ecomasperu?igsh=Nmh1eGNvb3VjN245'], ['fab fa-whatsapp','https://wa.me/message/S2FZTYSUOOCAN1'], ['fab fa-tiktok','https://www.tiktok.com/@novamaquillajeboutique']] as $red)
                         <a href="{{ $red[1] }}" target="_blank"
                            style="width:40px;height:40px;background:#1a1a2e;color:#fff;border-radius:50%;
                                   display:flex;align-items:center;justify-content:center;text-decoration:none;">

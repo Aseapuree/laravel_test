@@ -90,14 +90,17 @@ class WebController extends Controller
     public function finalize(Request $request){
         $request->validate([
             'voucher' => 'required',
-            'city' => 'required',
+            'city' => 'required|in:Chiclayo,Lambayeque,Monsefú,Ferreñafe',
             'address' => 'required',
             'payment_method_id' => 'required',
-            'delivery_id' => 'required'
         ]);
 
         $client_id = auth()->user()->id;
-        $delivery = Delivery::find($request->delivery_id);
+
+        // Envío a domicilio automático según ciudad
+        $shippingCost = in_array($request->city, ['Chiclayo', 'Lambayeque']) ? 10.00 : 15.00;
+        $delivery = Delivery::where('name', 'like', '%domicilio%')->first() ?? Delivery::first();
+
         $cart = session('cart', []);
         $total = array_reduce($cart, function($sum, $item){
             return $sum + ($item['price'] * $item['quantity']);
@@ -115,9 +118,9 @@ class WebController extends Controller
             'address' => $request->address,
             'number' => $sale_number,
             'client_id' => $client_id,
-            'total' => $total + $delivery->price,
+            'total' => $total + $shippingCost,
             'payment_method_id' => $request->payment_method_id,
-            'delivery_id' => $request->delivery_id,
+            'delivery_id' => $delivery->id,
             'date' => now(),
             'status' => 'Pendiente'
         ]);
@@ -159,7 +162,9 @@ class WebController extends Controller
             }
         });
 
-        return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale));
+        return redirect()->route('success')
+            ->with('voucher_url', route('sales.pdf', $sale))
+            ->with('order_total', $total + $shippingCost);
     }
 
     public function success(){

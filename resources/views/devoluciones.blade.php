@@ -138,7 +138,7 @@
                 <div class="text-center mt-5 p-4" style="background:#1a1a2e; border-radius:10px;">
                     <h5 class="text-white fw-bold mb-2">¿Listo para iniciar tu solicitud?</h5>
                     <p class="mb-3" style="color:rgba(255,255,255,.6);">
-                        Escríbenos por WhatsApp al <strong class="text-white">+51 947 338 369</strong> o usa el formulario de contacto.
+                        Escríbenos por WhatsApp o usa el formulario de contacto.
                     </p>
                     <a href="{{ route('contactame') }}" class="theme-btn">Contactar Soporte</a>
                 </div>

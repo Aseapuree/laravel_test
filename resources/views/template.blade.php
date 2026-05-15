@@ -70,8 +70,8 @@
         <div class="header-bottom-wrapper">
             <ul class="contact-list">
                 <li>
-                    <i class="fa-solid fa-phone"></i>
-                    <a href="tel:+51947338369">+51 947338369</a>
+                    <i class="fa-solid fa-whatsapp"></i>
+                    <a href="https://wa.me/message/S2FZTYSUOOCAN1">Contactanos al WhatsApp</a>
                 </li>
                 <li>
                     <i class="fa-solid fa-envelope"></i>
@@ -168,8 +168,8 @@
 <footer class="footer-section footer-bg-2 fix">
     <div class="container">
         <div class="footer-widget-wrapper style-2">
-            <div class="row">
-                <div class="col-xl-3 col-lg-4 col-md-4 wow fadeInUp" data-wow-delay=".2s">
+            <div class="row g-4">
+                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
                             <a href="#" class="footer-logo">
@@ -182,60 +182,48 @@
                                     Somos una tienda virtual encargados de brindarte las mejores ofertas en productos de belleza y cuidado personal.
                                 </p>
                                 <div class="social-icon style-3 d-flex align-items-center">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="https://www.facebook.com/share/1CowSi4Sxq/"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="https://www.instagram.com/ecomasperu?igsh=Nmh1eGNvb3VjN245"><i class="fab fa-instagram"></i></a>
+                                    <a href="https://www.tiktok.com/@novamaquillajeboutique"><i class="fab fa-tiktok"></i></a>
+                                    <a href="https://wa.me/message/S2FZTYSUOOCAN1"><i class="fab fa-whatsapp"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-4 col-md-4 ps-lg-5 wow fadeInUp" data-wow-delay=".4s">
+                <div class="col-xl-2 col-lg-3 col-md-3 col-6 wow fadeInUp" data-wow-delay=".4s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
                             <h3>Mi cuenta</h3>
                         </div>
                         <ul class="list-items style-color">
                             @if(auth()->guard('web')->check())
-                            <li> <a href="{{ route('index')}}">Inicio</a></li>
-                            <li> <a href="{{ route('shop')}}">Tienda</a></li>
-                            <li>
-                                <a href="{{ route('profile') }}">
-                                    Perfil
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('orders') }}">
-                                    Pedidos
-                                </a>
-                            </li>
+                            <li><a href="{{ route('index')}}">Inicio</a></li>
+                            <li><a href="{{ route('shop')}}">Tienda</a></li>
+                            <li><a href="{{ route('profile') }}">Perfil</a></li>
+                            <li><a href="{{ route('orders') }}">Pedidos</a></li>
                             @else
-                            <li>
-                                <a href="{{ route('auth.login') }}">Ingresar</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('auth.register') }}">Registrarse</a>
-                            </li>
+                            <li><a href="{{ route('auth.login') }}">Ingresar</a></li>
+                            <li><a href="{{ route('auth.register') }}">Registrarse</a></li>
                             @endif
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-lg-4 col-md-4 ps-lg-5 wow fadeInUp" data-wow-delay=".6s">
+                <div class="col-xl-2 col-lg-3 col-md-3 col-6 wow fadeInUp" data-wow-delay=".6s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Información Legal</h3>
+                            <h3>Legal</h3>
                         </div>
                         <ul class="list-items style-color">
                             <li><a href="{{ route('terminos') }}">Términos y Condiciones</a></li>
                             <li><a href="{{ route('privacidad') }}">Política de Privacidad</a></li>
                             <li><a href="{{ route('cookies') }}">Política de Cookies</a></li>
-                            <li><a href="{{ route('envio')}}">Politica de Envió</a><li>
+                            <li><a href="{{ route('envio')}}">Política de Envío</a></li>
                             <li><a href="{{ route('book') }}">Libro de Reclamaciones</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-2 col-lg-4 col-md-4 ps-lg-3 wow fadeInUp" data-wow-delay=".7s">
+                <div class="col-xl-2 col-lg-3 col-md-3 col-6 wow fadeInUp" data-wow-delay=".7s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
                             <h3>Soporte</h3>
@@ -246,15 +234,15 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-4 col-md-4 wow fadeInUp" data-wow-delay=".8s">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-6 wow fadeInUp" data-wow-delay=".8s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Contáctanos<h3>
+                            <h3>Contáctanos</h3>
                         </div>
                         <div class="footer-content">
                             <div class="text">
                                 <p>¿Dudas o Consultas?</p>
-                                <a href="tel:+51947338369">+51 947338369</a>
+                                <a href="https://wa.me/message/S2FZTYSUOOCAN1">Contactanos via WhatsApp</a>
                             </div>
                             <ul class="contact-list">
                                 <li>
@@ -273,7 +261,6 @@
             </div>
         </div>
     </div>
-</div>
 </footer>
 
 <!--<< All JS Plugins >>-->
