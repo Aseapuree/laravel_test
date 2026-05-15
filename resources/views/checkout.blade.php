@@ -130,8 +130,16 @@
                 </div>
                 @endforeach
                 <div class="checkout-item d-flex align-items-center justify-content-between">
-                  <p>Total</p>
+                  <p>Subtotal productos</p>
                   <p>S/{{ number_format($total, 2) }}</p>
+                </div>
+                <div class="checkout-item d-flex align-items-center justify-content-between" id="delivery-row" style="display:none!important;">
+                  <p>Costo de envío</p>
+                  <p id="delivery-cost-display">S/0.00</p>
+                </div>
+                <div class="checkout-item d-flex align-items-center justify-content-between">
+                  <p><strong>Total</strong></p>
+                  <p><strong id="grand-total-display">S/{{ number_format($total, 2) }}</strong></p>
                 </div>
                 <h3>Método de pago</h3>
                 <div class="checkout-item-2">
@@ -161,4 +169,38 @@
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+    var subtotal = {{ $total }};
+
+    var deliveryPrices = {
+        @foreach($deliveries as $delivery)
+        {{ $delivery->id }}: {{ $delivery->price }},
+        @endforeach
+    };
+
+    var select  = document.querySelector('select[name="delivery_id"]');
+    var costEl  = document.getElementById('delivery-cost-display');
+    var totalEl = document.getElementById('grand-total-display');
+    var rowEl   = document.getElementById('delivery-row');
+
+    function updateTotal() {
+        var id = parseInt(select.value);
+        if (!id || deliveryPrices[id] === undefined) {
+            rowEl.style.display = 'none';
+            totalEl.textContent = 'S/' + subtotal.toFixed(2);
+            return;
+        }
+        var deliveryCost = deliveryPrices[id];
+        var grandTotal   = subtotal + deliveryCost;
+        rowEl.style.removeProperty('display');
+        costEl.textContent  = 'S/' + deliveryCost.toFixed(2);
+        totalEl.textContent = 'S/' + grandTotal.toFixed(2);
+    }
+
+    select.addEventListener('change', updateTotal);
+    updateTotal();
+})();
+</script>
 @endsection

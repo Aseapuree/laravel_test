@@ -35,7 +35,12 @@ class ClientController extends Controller
     }
 
     public function destroy(Request $request, Client $client){
-        $client->update(['deleted' => 1]);
+        // Liberar el email y documento para permitir nuevos registros con los mismos datos
+        $client->update([
+            'deleted'  => 1,
+            'email'    => 'deleted_' . $client->id . '_' . $client->email,
+            'document' => 'deleted_' . $client->id . '_' . $client->document,
+        ]);
 
         return redirect()->route('clients.index')->with('message', 'Registro eliminado');
     }
