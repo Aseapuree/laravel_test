@@ -42,7 +42,7 @@
 					<tr>
 						<td>{{ $sale->voucher }}</td>
 						<td>{{ $sale->number }}</td>
-						<td>{{ $sale->client->name }}</td>
+						<td>{{ $sale->client ? $sale->client->name . ' ' . $sale->client->last_name : '(cliente eliminado)' }}</td>
 						<td>{{ $sale->total }}</td>
 						<td>{{ $sale->date }}</td>
 						<td>{{ $sale->status }}</td>

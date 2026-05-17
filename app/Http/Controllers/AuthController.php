@@ -18,16 +18,17 @@ class AuthController extends Controller
             'password' => 'required|min:8'
         ]);
 
-        if(Auth::guard('web')->attempt($credentials)){
-            $request->session()->regenerate();
-            return redirect()->intended(route('index'));
+        // Verificar que el cliente exista y no esté eliminado antes de intentar login
+        $client = Client::where('email', $request->email)->where('deleted', 0)->first();
+
+        if (!$client || !Auth::guard('web')->attempt($credentials)) {
+            return back()->withErrors([
+                'email' => 'Correo electrónico o contraseña incorrecta'
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Correo electrónico o contraseña incorrecta'
-        ]);
-
-
+        $request->session()->regenerate();
+        return redirect()->intended(route('index'));
     }
 
     public function register(){
@@ -36,23 +37,24 @@ class AuthController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'name' => 'required',
+            'name'      => 'required',
             'last_name' => 'required',
-            'document' => 'required|unique:clients,document',
-            'address' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email|unique:clients,email',
-            'password' => 'required|min:8'
+            // Ignorar registros eliminados (deleted=1) en la validación de unicidad
+            'document'  => 'required|unique:clients,document,NULL,id,deleted,0',
+            'address'   => 'required',
+            'phone'     => 'required',
+            'email'     => 'required|email|unique:clients,email,NULL,id,deleted,0',
+            'password'  => 'required|min:8'
         ]);
 
         Client::create([
-            'name' => $request->name,
+            'name'      => $request->name,
             'last_name' => $request->last_name,
-            'document' => $request->document,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'password' => bcrypt($request->password) 
+            'document'  => $request->document,
+            'address'   => $request->address,
+            'phone'     => $request->phone,
+            'email'     => $request->email,
+            'password'  => bcrypt($request->password)
         ]);
 
         return redirect()->route('auth.login');

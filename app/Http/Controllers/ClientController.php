@@ -35,7 +35,7 @@ class ClientController extends Controller
     }
 
     public function destroy(Request $request, Client $client){
-        // Liberar el email y documento para permitir nuevos registros con los mismos datos
+        // Anonymizar email y documento para liberar unicidad y permitir futuros registros
         $client->update([
             'deleted'  => 1,
             'email'    => 'deleted_' . $client->id . '_' . $client->email,
