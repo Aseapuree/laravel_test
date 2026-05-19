@@ -55,7 +55,7 @@ class SaleController extends Controller
         }elseif($sale->voucher == 'Factura'){
             $fpdf->MultiCell(60, 6, utf8_decode('FACTURA ELECTRÓNICA '.$sale->number), 1, 'C');
         }
-        
+
 
         $fpdf->Ln();
 
@@ -87,7 +87,7 @@ class SaleController extends Controller
 
         }
 
-        
+
 
         $fpdf->Ln();
         $fpdf->SetFont('Arial', 'B', 12);
@@ -127,7 +127,16 @@ class SaleController extends Controller
         $fpdf->Ln();
         $fpdf->SetFont('Arial', 'B', 10);
 
-        $subtotal_productos = $sale->total - $sale->delivery->price;
+        // Calcular costo de envio real segun ciudad (independiente del precio en tabla deliveries)
+        $cityPrices = [
+            'Chiclayo'   => 10, 'Lambayeque' => 10,
+            'Monsefú'    => 15, 'Ferreñafe'  => 15,
+        ];
+        $cityKey      = iconv('UTF-8', 'ASCII//TRANSLIT', $sale->city ?? '');
+        $cityKeyMap   = ['Chiclayo'=>10,'Lambayeque'=>10,'Monsefu'=>15,'Ferrenafe'=>15];
+        $shippingCost = $cityKeyMap[$cityKey] ?? ($cityPrices[$sale->city] ?? ($sale->delivery ? $sale->delivery->price : 0));
+
+        $subtotal_productos = $sale->total - $shippingCost;
         $igv      = round($subtotal_productos / 1.18 * 0.18, 2);
         $subtotal = round($subtotal_productos / 1.18, 2);
 
@@ -140,7 +149,7 @@ class SaleController extends Controller
         $fpdf->Ln();
 
         $fpdf->Cell(160, 5, 'ENVIO', 0, 0, 'R');
-        $fpdf->Cell(30, 5, $sale->delivery->price, 0, 0, 'R');
+        $fpdf->Cell(30, 5, number_format($shippingCost, 2), 0, 0, 'R');
         $fpdf->Ln();
         $fpdf->Cell(160, 5, 'TOTAL', 0, 0, 'R');
         $fpdf->Cell(30, 5, $sale->total, 0, 0, 'R');

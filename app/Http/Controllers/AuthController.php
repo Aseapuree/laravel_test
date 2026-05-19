@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use App\Models\Client;
 
 class AuthController extends Controller
@@ -14,7 +15,7 @@ class AuthController extends Controller
 
     public function check(Request $request){
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required|min:8'
         ]);
 
@@ -39,12 +40,18 @@ class AuthController extends Controller
         $request->validate([
             'name'      => 'required',
             'last_name' => 'required',
-            // Ignorar registros eliminados (deleted=1) en la validación de unicidad
-            'document'  => 'required|unique:clients,document,NULL,id,deleted,0',
+            'document'  => [
+                'required',
+                Rule::unique('clients', 'document')->where(fn($q) => $q->where('deleted', 0)),
+            ],
             'address'   => 'required',
             'phone'     => 'required',
-            'email'     => 'required|email|unique:clients,email,NULL,id,deleted,0',
-            'password'  => 'required|min:8'
+            'email'     => [
+                'required',
+                'email',
+                Rule::unique('clients', 'email')->where(fn($q) => $q->where('deleted', 0)),
+            ],
+            'password'  => 'required|min:8',
         ]);
 
         Client::create([
@@ -54,7 +61,7 @@ class AuthController extends Controller
             'address'   => $request->address,
             'phone'     => $request->phone,
             'email'     => $request->email,
-            'password'  => bcrypt($request->password)
+            'password'  => bcrypt($request->password),
         ]);
 
         return redirect()->route('auth.login');

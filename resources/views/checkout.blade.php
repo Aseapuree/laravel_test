@@ -12,7 +12,7 @@
           <li>Finalizar compra</li>
         </ul>
       </div>
-      <form action="#" method="post">
+      <form action="{{ route('finalize') }}" method="post">
         @csrf
         <div class="row g-4">
           <div class="col-lg-8">
@@ -26,7 +26,7 @@
                     <div class="col-lg-6">
                       <div class="input-single">
                         <span>Nombre *</span>
-                        <input type="text" name="name" value="{{ auth()->user()->name }}" disabled>
+                        <input type="text" value="{{ auth()->user()->name }}" disabled>
                       </div>
                     </div>
 
@@ -34,7 +34,7 @@
                     <div class="col-lg-6">
                       <div class="input-single">
                         <span>Apellidos *</span>
-                        <input type="text" name="last_name" value="{{ auth()->user()->last_name }}" disabled>
+                        <input type="text" value="{{ auth()->user()->last_name }}" disabled>
                       </div>
                     </div>
 
@@ -42,26 +42,26 @@
                     <div class="col-lg-12">
                       <div class="input-single">
                         <span>DNI *</span>
-                        <input type="text" name="document" value="{{ auth()->user()->document }}" disabled>
+                        <input type="text" value="{{ auth()->user()->document }}" disabled>
                       </div>
                     </div>
 
-                    {{-- Comprobante (primero para controlar RUC) --}}
+                    {{-- Comprobante --}}
                     <div class="col-lg-12">
                       <div class="input-single">
                         <span>Comprobante *</span>
                         <select class="form-select rounded-0" name="voucher" id="voucher_select">
                           <option value="">Seleccionar</option>
-                          <option value="Boleta" @if(old('voucher') == 'Boleta') selected @endif>Boleta</option>
+                          <option value="Boleta"  @if(old('voucher') == 'Boleta')  selected @endif>Boleta</option>
                           <option value="Factura" @if(old('voucher') == 'Factura') selected @endif>Factura</option>
                         </select>
                         @error('voucher')
-                        <div class="text-danger small">{{ $message }}</div>
+                          <div class="text-danger small">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
 
-                    {{-- Razón social + RUC — solo visible si Factura --}}
+                    {{-- Razón social + RUC (solo Factura) --}}
                     <div class="col-lg-12" id="factura_fields" style="{{ old('voucher') == 'Factura' ? '' : 'display:none;' }}">
                       <div class="row g-4">
                         <div class="col-lg-12">
@@ -79,7 +79,7 @@
                       </div>
                     </div>
 
-                    {{-- Ciudad (solo alcance de reparto) --}}
+                    {{-- Ciudad --}}
                     <div class="col-lg-12">
                       <div class="input-single">
                         <span>Ciudad *</span>
@@ -91,7 +91,7 @@
                           <option value="Ferreñafe"  @if(old('city') == 'Ferreñafe')  selected @endif>Ferreñafe</option>
                         </select>
                         @error('city')
-                        <div class="text-danger small">{{ $message }}</div>
+                          <div class="text-danger small">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
@@ -102,7 +102,7 @@
                         <span>Dirección *</span>
                         <input type="text" name="address" value="{{ old('address', auth()->user()->address) }}">
                         @error('address')
-                        <div class="text-danger small">{{ $message }}</div>
+                          <div class="text-danger small">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
@@ -110,8 +110,8 @@
                     {{-- Envío informativo --}}
                     <div class="col-lg-12">
                       <div class="input-single">
-                        <span>Tipo de envío</span>
-                        <div id="shipping_info" class="p-3 rounded-2" style="background:#f3f3f3;border:1px solid #e0e0e0;font-size:.95rem;">
+                        <span>Costo de envío</span>
+                        <div class="p-3 rounded-2" style="background:#f3f3f3;border:1px solid #e0e0e0;font-size:.95rem;">
                           <div class="d-flex align-items-center" style="gap:10px;">
                             <span style="font-size:1.4rem;">🚚</span>
                             <div>
@@ -120,22 +120,22 @@
                             </div>
                             <div class="ms-auto">
                               <span id="shipping_price" style="font-weight:700;font-size:1.1rem;color:#333;">
-                                @if(old('city') == 'Chiclayo' || old('city') == 'Lambayeque')
-                                  S/ 10.00
-                                @elseif(old('city') == 'Monsefú' || old('city') == 'Ferreñafe')
-                                  S/ 15.00
-                                @else
-                                  —
-                                @endif
+                                @php
+                                  $oc = old('city');
+                                  echo ($oc == 'Chiclayo' || $oc == 'Lambayeque') ? 'S/ 10.00'
+                                     : (($oc == 'Monsefú'  || $oc == 'Ferreñafe')  ? 'S/ 15.00' : '—');
+                                @endphp
                               </span>
                             </div>
                           </div>
-                          <div id="shipping_note" class="mt-2 small text-muted" style="{{ !old('city') ? 'display:none;' : '' }}">
-                            @if(old('city') == 'Chiclayo' || old('city') == 'Lambayeque')
-                              Envío dentro de Chiclayo y Lambayeque: S/ 10.00
-                            @elseif(old('city') == 'Monsefú' || old('city') == 'Ferreñafe')
-                              Envío a Monsefú / Ferreñafe: S/ 15.00
-                            @endif
+                          <div id="shipping_note" class="mt-2 small text-muted" style="{{ old('city') ? '' : 'display:none;' }}">
+                            @php
+                              $oc = old('city');
+                              if ($oc == 'Chiclayo' || $oc == 'Lambayeque')
+                                  echo 'Envío dentro de Chiclayo y Lambayeque: S/ 10.00';
+                              elseif ($oc == 'Monsefú' || $oc == 'Ferreñafe')
+                                  echo 'Envío a Monsefú / Ferreñafe: S/ 15.00';
+                            @endphp
                           </div>
                           <div id="shipping_select_city" class="mt-2 small text-muted" style="{{ old('city') ? 'display:none;' : '' }}">
                             Selecciona tu ciudad para ver el costo de envío.
@@ -143,6 +143,10 @@
                         </div>
                       </div>
                     </div>
+
+                    {{-- Hidden: delivery_id y shipping_cost calculado por JS --}}
+                    <input type="hidden" name="delivery_id" id="delivery_id_input" value="{{ old('delivery_id', 2) }}">
+                    <input type="hidden" name="shipping_cost" id="shipping_cost_input" value="{{ old('shipping_cost', 0) }}">
 
                   </div>
                 </div>
@@ -169,40 +173,28 @@
                   <p>Subtotal productos</p>
                   <p>S/{{ number_format($total, 2) }}</p>
                 </div>
-<<<<<<< HEAD
                 <div class="checkout-item d-flex align-items-center justify-content-between">
                   <p>Envío</p>
                   <p id="summary_shipping">
-                    @if(old('city') == 'Chiclayo' || old('city') == 'Lambayeque')
-                      S/ 10.00
-                    @elseif(old('city') == 'Monsefú' || old('city') == 'Ferreñafe')
-                      S/ 15.00
-                    @else
-                      —
-                    @endif
+                    @php
+                      $oc = old('city');
+                      echo ($oc == 'Chiclayo' || $oc == 'Lambayeque') ? 'S/ 10.00'
+                         : (($oc == 'Monsefú'  || $oc == 'Ferreñafe')  ? 'S/ 15.00' : '—');
+                    @endphp
                   </p>
                 </div>
                 <div class="checkout-item d-flex align-items-center justify-content-between" style="border-top:2px solid #eee;padding-top:8px;margin-top:4px;">
                   <p><strong>Total</strong></p>
                   <p id="summary_total">
                     @php
-                      $oldCity = old('city');
-                      $shipping = ($oldCity == 'Chiclayo' || $oldCity == 'Lambayeque') ? 10 : (($oldCity == 'Monsefú' || $oldCity == 'Ferreñafe') ? 15 : 0);
+                      $oc  = old('city');
+                      $fee = ($oc == 'Chiclayo' || $oc == 'Lambayeque') ? 10
+                           : (($oc == 'Monsefú'  || $oc == 'Ferreñafe')  ? 15 : null);
                     @endphp
-                    <strong>S/{{ $oldCity ? number_format($total + $shipping, 2) : '—' }}</strong>
+                    <strong>{{ $fee !== null ? 'S/ '.number_format($total + $fee, 2) : '—' }}</strong>
                   </p>
                 </div>
 
-=======
-                <div class="checkout-item d-flex align-items-center justify-content-between" id="delivery-row" style="display:none!important;">
-                  <p>Costo de envío</p>
-                  <p id="delivery-cost-display">S/0.00</p>
-                </div>
-                <div class="checkout-item d-flex align-items-center justify-content-between">
-                  <p><strong>Total</strong></p>
-                  <p><strong id="grand-total-display">S/{{ number_format($total, 2) }}</strong></p>
-                </div>
->>>>>>> f4334227460c06c2837d7f83b5187a9a64d9ab88
                 <h3>Método de pago</h3>
                 <div class="checkout-item-2">
                   @foreach($payment_methods as $payment_method)
@@ -217,7 +209,7 @@
                   </div>
                   @endforeach
                   @error('payment_method_id')
-                  <div class="text-danger small">{{ $message }}</div>
+                    <div class="text-danger small">{{ $message }}</div>
                   @enderror
                 </div>
 
@@ -234,95 +226,77 @@
 
 <script>
 (function () {
-<<<<<<< HEAD
-  // Subtotal de productos
-  var subtotal = {{ $total }};
-
-  // Mostrar/ocultar campos de Factura
-  var voucherSelect = document.getElementById('voucher_select');
-  var facturaFields = document.getElementById('factura_fields');
-
-  function toggleFactura() {
-    facturaFields.style.display = voucherSelect.value === 'Factura' ? '' : 'none';
-  }
-  voucherSelect.addEventListener('change', toggleFactura);
-
-  // Actualizar costo de envío según ciudad
-  var citySelect      = document.getElementById('city_select');
-  var shippingPrice   = document.getElementById('shipping_price');
-  var shippingNote    = document.getElementById('shipping_note');
-  var shippingSelMsg  = document.getElementById('shipping_select_city');
-  var summaryShipping = document.getElementById('summary_shipping');
-  var summaryTotal    = document.getElementById('summary_total');
-
-  var cheap  = ['Chiclayo', 'Lambayeque'];
-  var costly = ['Monsefú', 'Ferreñafe'];
-
-  function updateShipping() {
-    var city = citySelect.value;
-    var cost = null;
-    var noteText = '';
-
-    if (cheap.includes(city)) {
-      cost = 10;
-      noteText = 'Envío dentro de Chiclayo y Lambayeque: S/ 10.00';
-    } else if (costly.includes(city)) {
-      cost = 15;
-      noteText = 'Envío a Monsefú / Ferreñafe: S/ 15.00';
-    }
-
-    if (cost !== null) {
-      shippingPrice.textContent  = 'S/ ' + cost.toFixed(2);
-      shippingNote.textContent   = noteText;
-      shippingNote.style.display = '';
-      shippingSelMsg.style.display = 'none';
-      summaryShipping.textContent = 'S/ ' + cost.toFixed(2);
-      summaryTotal.innerHTML = '<strong>S/ ' + (subtotal + cost).toFixed(2) + '</strong>';
-    } else {
-      shippingPrice.textContent  = '—';
-      shippingNote.style.display = 'none';
-      shippingSelMsg.style.display = '';
-      summaryShipping.textContent = '—';
-      summaryTotal.innerHTML = '<strong>—</strong>';
-    }
-  }
-
-  citySelect.addEventListener('change', updateShipping);
-})();
-</script>
-
-@endsection
-=======
     var subtotal = {{ $total }};
 
-    var deliveryPrices = {
-        @foreach($deliveries as $delivery)
-        {{ $delivery->id }}: {{ $delivery->price }},
-        @endforeach
+    // Precios por ciudad
+    var cityPrices = {
+        'Chiclayo':   10,
+        'Lambayeque': 10,
+        'Monsefú':    15,
+        'Ferreñafe':  15
     };
 
-    var select  = document.querySelector('select[name="delivery_id"]');
-    var costEl  = document.getElementById('delivery-cost-display');
-    var totalEl = document.getElementById('grand-total-display');
-    var rowEl   = document.getElementById('delivery-row');
+    // IDs de delivery por ciudad (todos usan el mismo registro de envío a domicilio)
+    var cityDelivery = {
+        'Chiclayo':   2,
+        'Lambayeque': 2,
+        'Monsefú':    2,
+        'Ferreñafe':  2
+    };
 
-    function updateTotal() {
-        var id = parseInt(select.value);
-        if (!id || deliveryPrices[id] === undefined) {
-            rowEl.style.display = 'none';
-            totalEl.textContent = 'S/' + subtotal.toFixed(2);
-            return;
+    var citySelect       = document.getElementById('city_select');
+    var voucherSelect    = document.getElementById('voucher_select');
+    var facturaFields    = document.getElementById('factura_fields');
+    var shippingPrice    = document.getElementById('shipping_price');
+    var shippingNote     = document.getElementById('shipping_note');
+    var shippingSelMsg   = document.getElementById('shipping_select_city');
+    var summaryShipping  = document.getElementById('summary_shipping');
+    var summaryTotal     = document.getElementById('summary_total');
+    var deliveryIdInput  = document.getElementById('delivery_id_input');
+    var shippingCostInput = document.getElementById('shipping_cost_input');
+
+    // Notas por ciudad
+    var cityNotes = {
+        'Chiclayo':   'Envío dentro de Chiclayo y Lambayeque: S/ 10.00',
+        'Lambayeque': 'Envío dentro de Chiclayo y Lambayeque: S/ 10.00',
+        'Monsefú':    'Envío a Monsefú / Ferreñafe: S/ 15.00',
+        'Ferreñafe':  'Envío a Monsefú / Ferreñafe: S/ 15.00'
+    };
+
+    function updateShipping() {
+        var city = citySelect.value;
+        var cost = cityPrices[city];
+
+        if (cost !== undefined) {
+            shippingPrice.textContent    = 'S/ ' + cost.toFixed(2);
+            shippingNote.textContent     = cityNotes[city];
+            shippingNote.style.display   = '';
+            shippingSelMsg.style.display = 'none';
+            summaryShipping.textContent  = 'S/ ' + cost.toFixed(2);
+            summaryTotal.innerHTML       = '<strong>S/ ' + (subtotal + cost).toFixed(2) + '</strong>';
+            deliveryIdInput.value        = cityDelivery[city];
+            shippingCostInput.value      = cost;
+        } else {
+            shippingPrice.textContent    = '—';
+            shippingNote.style.display   = 'none';
+            shippingSelMsg.style.display = '';
+            summaryShipping.textContent  = '—';
+            summaryTotal.innerHTML       = '<strong>—</strong>';
+            deliveryIdInput.value        = '';
+            shippingCostInput.value      = 0;
         }
-        var deliveryCost = deliveryPrices[id];
-        var grandTotal   = subtotal + deliveryCost;
-        rowEl.style.removeProperty('display');
-        costEl.textContent  = 'S/' + deliveryCost.toFixed(2);
-        totalEl.textContent = 'S/' + grandTotal.toFixed(2);
     }
 
-    select.addEventListener('change', updateTotal);
-    updateTotal();
+    function toggleFactura() {
+        facturaFields.style.display = voucherSelect.value === 'Factura' ? '' : 'none';
+    }
+
+    citySelect.addEventListener('change', updateShipping);
+    voucherSelect.addEventListener('change', toggleFactura);
+
+    // Ejecutar al cargar (por si hay valores de old())
+    updateShipping();
+    toggleFactura();
 })();
 </script>
 @endsection
->>>>>>> f4334227460c06c2837d7f83b5187a9a64d9ab88

@@ -89,18 +89,26 @@ class WebController extends Controller
 
     public function finalize(Request $request){
         $request->validate([
-            'voucher' => 'required',
-            'city' => 'required|in:Chiclayo,Lambayeque,Monsefú,Ferreñafe',
-            'address' => 'required',
+            'voucher'           => 'required',
+            'city'              => 'required',
+            'address'           => 'required',
             'payment_method_id' => 'required',
+            'delivery_id'       => 'required',
         ]);
 
+        // Precio de envio segun ciudad (validado en backend, no confiamos solo en el hidden del form)
+        // Precio de envio segun ciudad (S/10 Chiclayo/Lambayeque, S/15 Monsefu/Ferrenafe)
+        $cityPrices = [
+            'Chiclayo'   => 10,
+            'Lambayeque' => 10,
+            'Monsefu'    => 15,  // sin tilde (iconv)
+            'Ferrenafe'  => 15,  // sin tilde (iconv)
+        ];
+        // Quitar tildes para la clave del mapa (Monsefú→Monsefu, Ferreñafe→Ferrenafe)
+        $cityKey = iconv('UTF-8', 'ASCII//TRANSLIT', $request->city);
+        $shippingCost = $cityPrices[$cityKey] ?? 0;
+
         $client_id = auth()->user()->id;
-
-        // Envío a domicilio automático según ciudad
-        $shippingCost = in_array($request->city, ['Chiclayo', 'Lambayeque']) ? 10.00 : 15.00;
-        $delivery = Delivery::where('name', 'like', '%domicilio%')->first() ?? Delivery::first();
-
         $cart = session('cart', []);
         $total = array_reduce($cart, function($sum, $item){
             return $sum + ($item['price'] * $item['quantity']);
@@ -111,18 +119,18 @@ class WebController extends Controller
         $sale_number = $number->serie.'-'.str_pad($number->number, 8, "0", STR_PAD_LEFT);
 
         $sale = Sale::create([
-            'bussiness_name' => $request->bussiness_name,
+            'bussiness_name'     => $request->bussiness_name,
             'bussiness_document' => $request->bussiness_document,
-            'voucher' => $request->voucher,
-            'city' => $request->city,
-            'address' => $request->address,
-            'number' => $sale_number,
-            'client_id' => $client_id,
-            'total' => $total + $shippingCost,
-            'payment_method_id' => $request->payment_method_id,
-            'delivery_id' => $delivery->id,
-            'date' => now(),
-            'status' => 'Pendiente'
+            'voucher'            => $request->voucher,
+            'city'               => $request->city,
+            'address'            => $request->address,
+            'number'             => $sale_number,
+            'client_id'          => $client_id,
+            'total'              => $total + $shippingCost,
+            'payment_method_id'  => $request->payment_method_id,
+            'delivery_id'        => $request->delivery_id,
+            'date'               => now(),
+            'status'             => 'Pendiente',
         ]);
 
         foreach($cart as $id => $item){
@@ -162,9 +170,7 @@ class WebController extends Controller
             }
         });
 
-        return redirect()->route('success')
-            ->with('voucher_url', route('sales.pdf', $sale))
-            ->with('order_total', $total + $shippingCost);
+        return redirect()->route('success')->with('voucher_url', route('sales.pdf', $sale));
     }
 
     public function success(){
