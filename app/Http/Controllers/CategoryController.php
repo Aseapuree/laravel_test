@@ -24,7 +24,7 @@ class CategoryController extends Controller
             'name' => 'required'
         ]);
 
-        Category::create($request->all());
+        y::create($request->all());
 
         return redirect()->route('categories.index')->with('message', 'Registro creado');
     }

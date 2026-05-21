@@ -66,7 +66,7 @@ class WebController extends Controller
     }
 
     public function dashboard(){
-        $clients = Client::count();
+        $clients = Client::active()->count();
         $products = Product::active()->count();
         $sales = Sale::active()->sum('total');
         return view('admin.index', compact('clients', 'products', 'sales'));
@@ -152,6 +152,7 @@ class WebController extends Controller
             'number' => $number->number + 1
         ]);
 
+        session()->put('order_total', $total + $shippingCost);
         session()->forget('cart');
 
         $saleForEmail = $sale;

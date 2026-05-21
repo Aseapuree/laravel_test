@@ -35,11 +35,12 @@ class ClientController extends Controller
     }
 
     public function destroy(Request $request, Client $client){
-        // Anonymizar email y documento para liberar unicidad y permitir futuros registros
+        // Usar solo los primeros 8 chars del doc para no superar varchar(20)
+        $shortDoc = substr($client->document, 0, 8);
         $client->update([
             'deleted'  => 1,
-            'email'    => 'deleted_' . $client->id . '_' . $client->email,
-            'document' => 'deleted_' . $client->id . '_' . $client->document,
+            'email'    => 'del_' . $client->id . '_' . $client->email,
+            'document' => 'del' . $client->id . $shortDoc,
         ]);
 
         return redirect()->route('clients.index')->with('message', 'Registro eliminado');

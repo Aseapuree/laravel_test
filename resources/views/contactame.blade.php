@@ -1,6 +1,20 @@
 @extends('template')
 
 @section('content')
+
+<style>
+/* Fix: inputs inside contactame form-clt need explicit dark text color */
+.form-clt input,
+.form-clt textarea,
+.form-clt select {
+    color: #333 !important;
+    background-color: #fff !important;
+}
+.form-clt input::placeholder,
+.form-clt textarea::placeholder {
+    color: #999 !important;
+}
+</style>
 <!-- Page Banner -->
 <div class="page-banner-area section-padding fix" style="background:#f9f5f2; padding: 60px 0 40px;">
     <div class="container">
